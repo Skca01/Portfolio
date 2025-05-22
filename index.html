@@ -738,7 +738,7 @@
         <h2 class="section-title">About Me</h2>
         <div class="about-content">
             <div class="about-image">
-                <img src="kent.jpg" alt="Kent Carlo B. Amante" class="profile-img">
+                <img src="images/profile.jpg" alt="Kent Carlo B. Amante" class="profile-img">
             </div>
             <div class="about-text">
                 <p>
@@ -1212,8 +1212,20 @@
             skillObserver.observe(item);
         });
 
-        document.querySelector('.contact-form').addEventListener('submit', function (e) {
+        document.querySelector('form.contact-form').addEventListener('submit', function (e) {
             e.preventDefault();
+
+            // Ensure form elements exist
+            if (!this.elements.name || !this.elements.email || !this.elements.subject || !this.elements.message) {
+                const button = this.querySelector('button[type="submit"]');
+                button.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Form fields missing';
+                button.style.background = '#ef4444';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                    button.style.background = '';
+                }, 5000);
+                return;
+            }
 
             const constraints = {
                 name: { presence: { allowEmpty: false }, format: { pattern: /^[A-Za-z .'-]+$/, message: 'must be a valid name' } },
@@ -1244,9 +1256,11 @@
                 return;
             }
 
+            // Show sending animation
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             button.style.background = '#6b7280';
 
+            // Submit form to Web3Forms
             this.submit();
         });
     </script>
